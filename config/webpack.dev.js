@@ -5,7 +5,7 @@ module.exports = merge(webpackBase, {
 	mode: 'development',
 	devServer: {
 		historyApiFallback: true,
-		contentBase: path.resolve(__dirname, '../dist'),
+		contentBase: path.resolve(__dirname, '../public'),
 		port: 3000,
 		quiet: true,
 		compress: true,

@@ -2,7 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require('copy-webpack-plugin');
-const config = require('../config/webpack.dev.js');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 module.exports = {
 	entry: {
@@ -11,7 +10,7 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, '../dist'),
-		filename: 'js/index.[hash:7].js'
+		filename: 'js/index.[hash:7].js',
 	},
 	module: {
 		rules: [
@@ -21,30 +20,26 @@ module.exports = {
 				//使用babel-loader进行转义
 				use:['babel-loader'],
 				//设置目标文件
-				include:path.resolve(__dirname,'../src'),
+				include:path.join(__dirname,'../src'),
 				//设置排除文件
 				exclude:path.resolve(__dirname,'../node_modules')
 			},
 			{
-				test: /\.(less|css)$/,
-				use: [
-					{ 
-						loader: MiniCssExtractPlugin.loader,
-						options: {
-							publicPath: '../dist'
-						}
-					},
-					'css-loader',
-					'less-loader'
-				]
+				test: /\.css$/,
+				use: [MiniCssExtractPlugin.loader, 'css-loader']// use从右往左写  
+			},
+			// 解析less  
+			{
+				test: /\.less$/,
+				use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader']
 			},
 			{
 				test: /\.(png|jpe?g|gif|svg)$/,
 				loader: 'url-loader',
 				options:{
 					limit: 8192,
-					outputPath:'/',
-					name:'img/[name].[hash:7].[ext]'
+					publicPath: '../',
+					name:'image/[name].[hash:7].[ext]'
 				}
 			},
 			{
@@ -62,7 +57,9 @@ module.exports = {
 			chunkFilename: "[id].css"
 		}),
 		new HtmlWebpackPlugin({
-			template: './public/index.html'
+			template: path.resolve(__dirname, '../public/index.html'),
+			filename: 'index.html',
+			favicon: path.resolve(__dirname, '../src/favicon.ico'),
 		}),
 		new CopyPlugin([
 	    { from: 'public', to: '../dist', ignore: ['*.html'] },
