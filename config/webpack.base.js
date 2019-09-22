@@ -15,16 +15,6 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				//匹配js或jsx类型文件
-				test:/\.js$/,
-				//使用babel-loader进行转义
-				use:['babel-loader'],
-				//设置目标文件
-				include:path.join(__dirname,'../src'),
-				//设置排除文件
-				exclude:path.resolve(__dirname,'../node_modules')
-			},
-			{
 				test: /\.css$/,
 				use: [MiniCssExtractPlugin.loader, 'css-loader']// use从右往左写  
 			},
